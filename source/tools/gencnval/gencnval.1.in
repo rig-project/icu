@@ -73,14 +73,14 @@ The default destination directory is specified by the environment variable
 .TP 10
 .B ICU_DATA
 Specifies the directory containing ICU data. Defaults to
-.BR @thepkgicudatadir@/@PACKAGE@/@VERSION@/ .
+.BR @thepkgicudatadir@/@ICU_PACKAGE@/@VERSION@/ .
 Some tools in ICU depend on the presence of the trailing slash. It is thus
 important to make sure that it is present if
 .B ICU_DATA
 is set.
 .SH FILES
-.TP \w'\fB@PACKAGE@/source/data/mappings/convrtrs.txt'u+3n
-.B @PACKAGE@/source/data/mappings/convrtrs.txt
+.TP \w'\fB@ICU_PACKAGE@/source/data/mappings/convrtrs.txt'u+3n
+.B @ICU_PACKAGE@/source/data/mappings/convrtrs.txt
 Description of ICU's converters and their aliases. This data file is not
 normally installed, and it is available as a part of ICU source code.
 .SH VERSION
