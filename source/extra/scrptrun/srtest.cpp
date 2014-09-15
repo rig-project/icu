@@ -24,7 +24,7 @@ UChar testChars[] = {
 
 int32_t testLength = sizeof testChars / sizeof testChars[0];
 
-void main()
+int main()
 {
     ScriptRun scriptRun(testChars, 0, testLength);
 
@@ -35,4 +35,6 @@ void main()
 
         printf("Script '%s' from %d to %d.\n", uscript_getName(code), start, end);
     }
+
+    return 0;
 }
