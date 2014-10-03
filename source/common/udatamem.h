@@ -39,6 +39,9 @@ struct UDataMemory {
                                    /* Only non-null if a close operation should unmap */
                                    /*  the associated data, and additional info       */
                                    /*   beyond the mapAddr is needed to do that.      */
+    UDataDestroyNotify destroy;    /* Callback for externally owned memory */
+    void	      *destroyData;
+
     int32_t           length;      /* Length of the data in bytes; -1 if unknown.     */
 };
 

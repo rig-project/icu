@@ -88,14 +88,17 @@ U_CFUNC void UDataMemory_setData (UDataMemory *This, const void *dataAddr) {
 
 U_CAPI void U_EXPORT2
 udata_close(UDataMemory *pData) {
-    if(pData!=NULL) {
-        uprv_unmapFile(pData);
-        if(pData->heapAllocated ) {
-            uprv_free(pData);
-        } else {
-            UDataMemory_init(pData);
-        }
-    }
+    if(!pData)
+	return;
+
+    if (pData->destroy)
+	pData->destroy((void *)pData->pHeader, pData->destroyData);
+    else if (pData->mapAddr)
+	uprv_unmapFile(pData);
+    else if(pData->heapAllocated )
+	uprv_free(pData);
+
+    UDataMemory_init(pData);
 }
 
 U_CAPI const void * U_EXPORT2

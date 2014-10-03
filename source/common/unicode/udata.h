@@ -411,6 +411,44 @@ typedef enum UDataFileAccess {
 U_STABLE void U_EXPORT2
 udata_setFileAccess(UDataFileAccess access, UErrorCode *status);
 
+typedef void (*UDataDestroyNotify)(void *header, void *data);
+
+typedef struct
+{
+    const void *header;
+    int32_t length;
+    UDataDestroyNotify destroyCallback;
+    void *destroyData;
+} UDataExternalMemory;
+
+typedef void (*UDataLoadCallback)(
+    UBool isICUData,
+    const char *pkgName,
+    const char *dataPath,
+    const char *tocEntryPathSuffix,
+    const char *tocEntryName,
+    /* following arguments are the same as doOpenChoice itself */
+    const char *path,
+    const char *type,
+    const char *name,
+    UDataMemoryIsAcceptable *isAcceptable, void *context,
+    void *data,
+    UDataExternalMemory *pExtMem,
+    UErrorCode *pErrorCode);
+
+/**
+ * This function lets applications provide their own loading mechanism for ICU data.
+ */
+U_STABLE void U_EXPORT2
+udata_setLoadCallback(UDataLoadCallback callback, void *data);
+
+U_CAPI const void *
+udata_commonDataLookup(
+    void *header,
+    const char *tocEntryName,
+    int32_t *pLength,
+    UErrorCode *pErrorCode);
+
 U_CDECL_END
 
 #endif

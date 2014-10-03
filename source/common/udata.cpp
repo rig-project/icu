@@ -86,6 +86,9 @@ static UDataMemory *udata_findCachedData(const char *path);
 *
 ************************************************************************/
 
+static UDataLoadCallback gDataLoadCallback;
+static void *gDataLoadCallbackData;
+
 /*
  * Pointers to the common ICU data.
  *
@@ -1233,6 +1236,34 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* End of dealing with a null basename */
     dataPath = u_getDataDirectory();
 
+    if (gDataLoadCallback) {
+	UDataExternalMemory extMem;
+
+	gDataLoadCallback(
+		isICUData,
+		pkgName.data(), dataPath, tocEntryPathSuffix, tocEntryName.data(),
+		path, type, name, isAcceptable, context,
+		gDataLoadCallbackData,
+		&extMem,
+		pErrorCode);
+
+        if (U_FAILURE(*pErrorCode))
+            return NULL;
+
+        retVal = UDataMemory_createNewInstance(pErrorCode);
+        if (U_FAILURE(*pErrorCode)) {
+	    extMem.destroyCallback((void *)extMem.header, extMem.destroyData);
+            return NULL;
+	}
+
+	retVal->pHeader = (DataHeader *)extMem.header;
+	retVal->length = extMem.length;
+	retVal->destroy = extMem.destroyCallback;
+	retVal->destroyData = extMem.destroyData;
+
+	return retVal;
+    }
+
     /****    COMMON PACKAGE  - only if packages are first. */
     if(gDataFileAccess == UDATA_PACKAGES_FIRST) {
 #ifdef UDATA_DEBUG
@@ -1374,4 +1405,27 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo) {
 U_CAPI void U_EXPORT2 udata_setFileAccess(UDataFileAccess access, UErrorCode * /*status*/)
 {
     gDataFileAccess = access;
+}
+
+U_CAPI void U_EXPORT2 udata_setLoadCallback(UDataLoadCallback callback, void *data)
+{
+    gDataLoadCallback = callback;
+    gDataLoadCallbackData = data;
+}
+
+U_CAPI const void *udata_commonDataLookup(void *header,
+	const char *tocEntryName,
+	int32_t *pLength,
+	UErrorCode *pErrorCode)
+{
+    UDataMemory mem;
+
+    UDataMemory_init(&mem);
+
+    mem.pHeader = (DataHeader *)header;
+    udata_checkCommonData(&mem, pErrorCode);
+    if (U_FAILURE(*pErrorCode))
+	return NULL;
+
+    return mem.vFuncs->Lookup(&mem, tocEntryName, pLength, pErrorCode);
 }
