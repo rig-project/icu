@@ -8,7 +8,9 @@ if TOOLS
 SUBDIRS += tools
 endif
 
+if DATA
 SUBDIRS += data
+endif
 
 if EXTRAS
 SUBDIRS += extra

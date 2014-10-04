@@ -422,6 +422,20 @@ AC_ARG_ENABLE(tools,
 	tools=true)
 AM_CONDITIONAL(TOOLS, test "$tools" = true)
 
+# Enable/disable building of data
+AC_ARG_ENABLE(data,
+	[  --enable-data         build data [default=yes]],
+	[case "${enableval}" in
+		yes) data=true ;;
+		no)  data=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-data) ;;
+		esac],
+	data=true)
+if test "$data" = true -a "$tools" != true; then
+    AC_MSG_ERROR(The tools are needed to build the data)
+fi
+AM_CONDITIONAL(DATA, test "$data" = true)
+
 # Enable/disable tests
 AC_ARG_ENABLE(tests,
 	[  --enable-tests          build ICU tests [default=yes]],
