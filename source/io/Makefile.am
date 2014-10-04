@@ -14,5 +14,5 @@ include $(srcdir)/Makefile.sources
 lib_LTLIBRARIES = libicuio.la
 
 libicuio_la_LIBADD =
-libicuio_la_LDFLAGS = -release $(U_MAJOR_VERSION).$(U_MINOR_VERSION)
+libicuio_la_LDFLAGS =
 libicuio_la_SOURCES = $(icu_io_sources)

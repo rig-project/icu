@@ -13,7 +13,7 @@ include $(srcdir)/Makefile.sources
 lib_LTLIBRARIES = libicuuc.la
 
 libicuuc_la_LIBADD =
-libicuuc_la_LDFLAGS = -release $(U_MAJOR_VERSION).$(U_MINOR_VERSION)
+libicuuc_la_LDFLAGS =
 libicuuc_la_SOURCES = $(icu_common_sources)
 
 unicode_includedir = $(includedir)/unicode
