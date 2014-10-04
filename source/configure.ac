@@ -100,29 +100,6 @@ AC_ARG_ENABLE(debug,
 AC_MSG_RESULT($enabled)
 AC_SUBST(ENABLE_DEBUG)
 
-AC_ARG_WITH(cross-build,
-	[  --with-cross-build=dir specify an absolute path to the build directory of an ICU built for the current platform [default=no cross dir]],
-	[cross_buildroot="${withval}"],
-        [cross_buildroot=""])
-
-if test "X$cross_buildroot" = "X"; then
-    if test "$cross_compiling" = "yes"; then
-        AC_MSG_ERROR([Error! Cross compiling but no --with-cross-build option specified - please supply the path to an executable ICU's build root])
-	dnl '
-    fi
-else
-    if test -f "${cross_buildroot}/config/icucross.mk"; then
-        AC_MSG_RESULT([Using cross buildroot: $cross_buildroot])
-    else
-        if test -d "${cross_buildroot}"; then
-            AC_MSG_ERROR([${cross_buildroot}/config/icucross.mk not found. Please build ICU in ${cross_buildroot} first.])
-        else
-            AC_MSG_ERROR([No such directory ${cross_buildroot} supplied as the argument to --with-cross-build. Use an absolute path.])
-        fi
-    fi
-fi
-AC_SUBST(cross_buildroot)
-
 # Check for doxygen to generate documentation
 AC_PATH_PROG(DOXYGEN,doxygen,,$PATH:/usr/local/bin:/usr/bin)
 
