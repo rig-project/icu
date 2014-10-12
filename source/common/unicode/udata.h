@@ -444,7 +444,7 @@ udata_setLoadCallback(UDataLoadCallback callback, void *data);
 
 U_CAPI const void *
 udata_commonDataLookup(
-    void *header,
+    const void *header,
     const char *tocEntryName,
     int32_t *pLength,
     UErrorCode *pErrorCode);
