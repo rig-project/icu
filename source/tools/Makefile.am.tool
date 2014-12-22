@@ -6,6 +6,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/i18n \
 	-I$(top_srcdir)/tools/toolutil \
 	-I$(top_builddir) \
+	-I$(top_builddir)/common \
 	$(U_CPPFLAGS)
 
 AM_CFLAGS = $(U_CFLAGS)
